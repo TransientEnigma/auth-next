@@ -11,14 +11,14 @@ Adding Project Directories and Files,
 Backend api Folder,
 Connecting the Database,
 Frontend Signup and Login Forms,
-Creating profile page
+Creating profile page.
 2. MongoDB Signup and Login:
 Compiling your first model,
 How does the token part work,
 Creating POST Request for user,
 Debugging,
-Login Route
+Login Route.
 3. JWT, Cookies and protected routes, middleware:
 Logout Route and Button,
 Middleware,
-Extracting Data from the Token
+Extracting Data from the Token.
