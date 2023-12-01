@@ -1,5 +1,6 @@
 I worked through practically and coded along with the author of an online course on Youtube called Complete Nextjs fullstack Authentication by Hitesh Choudhary. 
-The course covered the following criteria: 
+
+Here are some of the topics I covered in the course: 
 1. Introduction and File Structure for Front End:
 Mailtrap,
 Theoretical Build,
