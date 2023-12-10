@@ -15,9 +15,7 @@ export const sendEmail = async ({email, emailType, userId}: any) => {
 
         if (emailType === "VERIFY") {
 
-            console.log('*** "VERIFY" ****');
-            console.log(`userId = ${userId}`);
-
+            // find and update the user with token and expiration
             var user = await User.findByIdAndUpdate(userId, {
                 verifyToken: hashedToken,
                 verifyTokenExpiration: Date.now() + 3600000
@@ -27,9 +25,7 @@ export const sendEmail = async ({email, emailType, userId}: any) => {
 
         } else if (emailType === "RESET") {
 
-            console.log('*** "RESET" ****');
-            console.log(`userId = ${userId}`);
-
+            // find and update the user with token and expiration
             await User.findByIdAndUpdate(userId, 
                 {
                     forgotPasswordToken: hashedToken,
@@ -38,8 +34,8 @@ export const sendEmail = async ({email, emailType, userId}: any) => {
             );
         } 
 
-        console.log(`NEXT_PUBLIC_TRANSPORT_USER: ${process.env.NEXT_PUBLIC_TRANSPORT_USER}`);
-        console.log(`NEXT_PUBLIC_TRANSPORT_PASSWORD: ${process.env.NEXT_PUBLIC_TRANSPORT_PASSWORD}`);
+        // console.log(`NEXT_PUBLIC_TRANSPORT_USER: ${process.env.NEXT_PUBLIC_TRANSPORT_USER}`);
+        // console.log(`NEXT_PUBLIC_TRANSPORT_PASSWORD: ${process.env.NEXT_PUBLIC_TRANSPORT_PASSWORD}`);
 
     const transporter = nodemailer.createTransport({
         host: "sandbox.smtp.mailtrap.io",
@@ -58,7 +54,8 @@ export const sendEmail = async ({email, emailType, userId}: any) => {
         html: 
         `
             <p> Click <a href="${process.env.NEXT_PUBLIC_DOMAIN}/verifyemail?token=${hashedToken}">Here</a>
-                to ${emailType === "VERIFY" ? "verify your email" : "reset your password"}
+                to ${emailType === "VERIFY" ? "verify your email" : "reset your password"} or copy and paste
+                the link in your browser: ${process.env.NEXT_PUBLIC_DOMAIN}/verifyemail?token=${hashedToken}
             </p>
         `
     }
