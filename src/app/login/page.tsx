@@ -15,10 +15,20 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
+  // This bearer would be generated via backend api for authenticated user and sent with each request
+  const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzYzYmFhZGI2YzM0OTZkZGY3YzYzNyIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcwNDEzNDcyOCwiZXhwIjoxNzA0MTM4MzI4fQ.VRnpRT9LxfebCLnaBKSPe21VBIDTUj5xWud3VMsGEVw';
+  
   const onLogin = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('/api/users/login', user);
+      const response = await axios.post('/api/users/login', 
+      user,{
+        headers: {
+          Authorization: `Bearer ${jwt}`,
+        },
+      }
+    );
+
       console.log('Login success', response.data);
       toast.success('Login success');
       router.push('/profile')

@@ -8,6 +8,9 @@ connect();
 
 export async function POST(request: NextRequest) {
     try {
+        const authToken = (request.headers.get('Authorization') || '').split("Bearer ").at(1);
+        console.log(`authToken: ${authToken}`)
+
         const reqBody = await request.json();
         // get the email and password from the request
         const {email, password} = reqBody;
