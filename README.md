@@ -1,5 +1,5 @@
-I worked through and coded along with the author of an online course on YouTube called Complete Nextjs fullstack Authentication by Hitesh Choudhary. 
-I then added to this project by adding Security Headers, installing Jest and adding Tests.
+After Completing the course Nextjs fullstack Authentication by Hitesh Choudhary. 
+I then added Security Headers, refactored code, installed Jest and created Tests.
 
 Here are some of the topics I covered in the course: 
 1. Introduction and File Structure for Front End:
