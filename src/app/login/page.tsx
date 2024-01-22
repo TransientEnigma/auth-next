@@ -15,7 +15,7 @@ export default function LoginPage() {
   const [loading, setLoading] = React.useState(false);
   const router = useRouter();
 
-  // This bearer would be generated via backend api for authenticated user and sent with each request
+  // This bearer would be from backend api, for authenticated user, and sent with each request
   const jwt = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY1NzYzYmFhZGI2YzM0OTZkZGY3YzYzNyIsInVzZXJuYW1lIjoidGVzdCIsImVtYWlsIjoidGVzdEB0ZXN0LmNvbSIsImlhdCI6MTcwNDEzNDcyOCwiZXhwIjoxNzA0MTM4MzI4fQ.VRnpRT9LxfebCLnaBKSPe21VBIDTUj5xWud3VMsGEVw';
   
   const onLogin = async () => {
