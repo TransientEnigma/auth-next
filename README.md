@@ -1,4 +1,5 @@
-I worked through practically and coded along with the author of an online course on Youtube called Complete Nextjs fullstack Authentication by Hitesh Choudhary. I then added to this project by adding Security Headers.
+I worked through and coded along with the author of an online course on YouTube called Complete Nextjs fullstack Authentication by Hitesh Choudhary. 
+I then added to this project by adding Security Headers, installing Jest and adding Tests.
 
 Here are some of the topics I covered in the course: 
 1. Introduction and File Structure for Front End:
@@ -14,15 +15,25 @@ Connecting the Database,
 Frontend Signup and Login Forms,
 Creating profile page.
 2. MongoDB Signup and Login:
-Compiling your first model,
-How does the token part work,
+Compiling your first mongoose model schema,
+Tokens,
 Creating POST Request for user,
 Debugging,
 Login Route.
 3. JWT, Cookies and protected routes, middleware:
 Logout Route and Button,
 Middleware,
-Extracting Data from the Token.
+Extracting Data from Token.
+4. Security Headers
+X-Content-Type-Options, 
+X-Frame-Options, 
+X-XSS-Protection, 
+Strict-Transport-Security, 
+Permissions-Policy, 
+Referrer-Policy
+Content-Security-Policy,
+Authorisation 
+Bearer Token
 
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
