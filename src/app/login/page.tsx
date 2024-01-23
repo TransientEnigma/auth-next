@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import  axios from 'axios';
+import axios from 'axios';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -21,13 +21,14 @@ export default function LoginPage() {
   const onLogin = async () => {
     try {
       setLoading(true);
-      const response = await axios.post('/api/users/login', 
-      user,{
-        headers: {
-          Authorization: `Bearer ${jwt}`,
-        },
-      }
-    );
+      const response = await axios.post(
+        '/api/users/login',
+          user,
+          {
+              headers: {
+                  Authorization: `Bearer ${jwt}`,
+              },
+          });
 
       console.log('Login success', response.data);
       toast.success('Login success');
@@ -63,9 +64,10 @@ export default function LoginPage() {
             id='email'
             name='email'
             type='text'
-            value={user.email}
+            value={user.email ? user.email : undefined}
             onChange={updateUser}
             placeholder='email'
+            defaultValue={undefined}
           />
           <label htmlFor='password'>password</label>
           <input
@@ -73,9 +75,10 @@ export default function LoginPage() {
             id='password'
             name='password'
             type='text'
-            value={user.password}
+            value={user.password ? user.password : undefined}
             onChange={updateUser}
             placeholder='password'
+            defaultValue={undefined}
           />
           <button
             type='button'
@@ -85,7 +88,7 @@ export default function LoginPage() {
           >
             {buttonDisabled ? 'Disabled' : 'Login'}
           </button>
-          <Link href='/signup'>Visit Signup page</Link>
+          <Link href='/signup'>Visit Signup Page</Link>
       </div>
     )
   }
