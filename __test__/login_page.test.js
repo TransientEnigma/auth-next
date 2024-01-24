@@ -1,4 +1,4 @@
-import {cleanup, fireEvent, render, act, screen} from '@testing-library/react';
+import {cleanup, fireEvent, render, act, screen, waitFor} from '@testing-library/react';
 import '@testing-library/jest-dom';
 import axios from 'axios';
 import {createRoot,Root} from "react-dom/client";
@@ -13,18 +13,6 @@ jest.mock("next/navigation");
 jest.mock('axios', () => ({
     post: jest.fn()
 }));
-
-
-// ignore the useState
-const mockSetState = jest.fn();
-jest.mock('react', () => {
-    const actualReact = jest.requireActual('react');
-    return {
-        ...actualReact,
-        useState: initial => [initial, mockSetState],
-    };
-});
-
 
 describe("Displays Login Page Components on Screen", () => {
     let container;
@@ -49,7 +37,6 @@ describe("Displays Login Page Components on Screen", () => {
             jest.clearAllMocks();
             cleanup();
         })
-
         // after cleanup the element will cease to exist and this will error
         // console.log('after cleanup: ', !!screen.getByText(/disabled/i, { selector: 'button' }));
     });
@@ -57,7 +44,6 @@ describe("Displays Login Page Components on Screen", () => {
 
     test('it renders Login heading on screen', () => {
         const allByLoginText = screen.getAllByText(/Login/i);
-        // console.log('Login allByLoginText: ',allByLoginText);
         const loginHeading = allByLoginText[0];
         expect(loginHeading.nodeName).toEqual('H1');
         expect(loginHeading).toBeInTheDocument();
@@ -101,10 +87,10 @@ describe("Displays Login Page Components on Screen", () => {
         expect(passwordInput).toBeEmptyDOMElement();
     })
 
-    // test('it renders login button with disabled text on screen', () => {
-    //     const loginButton = screen.getByText(/disabled/i, { selector: 'button' });
-    //     expect(loginButton).toBeInTheDocument();
-    // })
+    test('it renders login button with disabled text on screen', () => {
+        const loginButton = screen.getByText(/disabled/i, { selector: 'button' });
+        expect(loginButton).toBeInTheDocument();
+    })
 
     test('it renders Visit Signup Page Link ', () => {
         const links = document.querySelectorAll('a');
@@ -112,7 +98,20 @@ describe("Displays Login Page Components on Screen", () => {
         expect(visitSignupPageLink.innerHTML).toEqual('Visit Signup Page');
     })
 
-    test('check button status changes from Disabled to Login when email and password fields have input ', () => {
+    test('check button status changes from Disabled to Login when email and password fields have input ', async () => {
+
+        const user = {email: "test@test.com", password: '123456'};
+
+        jest.mock('react', () => {
+            const actualReact = jest.requireActual('react');
+            const mockSetUser = jest.fn();
+
+            return {
+                ...actualReact,
+                useState: user => [user, mockSetUser],
+            };
+        });
+
         const inputs = document.querySelectorAll('input');
         const emailInput = inputs[0];
         const passwordInput = inputs[1];
@@ -123,34 +122,33 @@ describe("Displays Login Page Components on Screen", () => {
             fireEvent.change(passwordInput, {target: {value: '123456'}});
         });
 
+        // this works with disable text below; we need it to work with /login/i
+        const buttons = await waitFor(() => {
+            return screen.findAllByText(
+                /login/i,
+                { selector: 'button' },
+                { timeout: 3000 }
+            );
+        });
 
-        console.log('inputs set to',{email: emailInput.textContent, password: passwordInput.textContent})
+        console.log('Button Text:', buttons[0].textContent);
 
-        const buttons = document.querySelectorAll('button')
         const LoginButton = buttons[0];
         expect(LoginButton.textContent).toEqual('Login');
 
         // click Login button
-        fireEvent.click(LoginButton)
+        act(() => {
+            fireEvent.click(LoginButton);
+        });
 
-        const user = { "email": "", "password": ""};
         const url = '/api/users/login';
 
-
         expect(axios.post).toHaveBeenCalledWith(
-            url,
-            user,
-            {
-                headers: {
-                    Authorization: expect.stringMatching(/.+/),
-                },
-            }
-        );
+            url, user, {headers: {Authorization: expect.stringMatching(/.+/)},}
+        )
 
         expect(axios.post).toHaveBeenCalled();
-
-    })
-
+    });
 });
 
 // {

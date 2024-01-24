@@ -13,6 +13,7 @@ export default function LoginPage() {
 
   const [buttonDisabled, setButtonDisabled] = React.useState(false);
   const [loading, setLoading] = React.useState(false);
+  const [onMount, setOnMount] = React.useState(false);
   const router = useRouter();
 
   // This bearer would be from backend api, for authenticated user, and sent with each request
@@ -41,13 +42,17 @@ export default function LoginPage() {
     }
   }
 
+    useEffect(() => {
+      setOnMount(true);
+    }, []);
+
   useEffect(() => {
     if (user.email.length > 0 && user.password.length > 0) {
       setButtonDisabled(false);
     } else {
       setButtonDisabled(true);
     }
-  }, [user])
+  }, [user]);
 
   const updateUser = (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -64,7 +69,7 @@ export default function LoginPage() {
             id='email'
             name='email'
             type='text'
-            value={user.email ? user.email : undefined}
+            value={user.email ? user.email : ""}
             onChange={updateUser}
             placeholder='email'
             defaultValue={undefined}
@@ -75,19 +80,20 @@ export default function LoginPage() {
             id='password'
             name='password'
             type='text'
-            value={user.password ? user.password : undefined}
+            value={user.password ? user.password : ""}
             onChange={updateUser}
             placeholder='password'
             defaultValue={undefined}
           />
-          <button
+          { onMount ? <button
             type='button'
             onClick={onLogin}
             className='p-2 border border-gray-300 rounded-lg mb-4 focus:outline-none focus:border-gray-600'
             disabled={buttonDisabled}
           >
-            {buttonDisabled ? 'Disabled' : 'Login'}
-          </button>
+            {buttonDisabled ? "Disabled" : "Login"}
+          </button> : ""
+          }
           <Link href='/signup'>Visit Signup Page</Link>
       </div>
     )
