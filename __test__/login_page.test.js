@@ -10,10 +10,6 @@ import LoginPage from '../src/app/login/page';
 // was causing an error so mock it, see: https://nextjs.org/docs/messages/next-router-not-mounted
 jest.mock("next/navigation");
 
-jest.mock('axios', () => ({
-    post: jest.fn()
-}));
-
 describe("Displays Login Page Components on Screen", () => {
     let container;
     let root;
@@ -98,19 +94,24 @@ describe("Displays Login Page Components on Screen", () => {
         expect(visitSignupPageLink.innerHTML).toEqual('Visit Signup Page');
     })
 
-    test('check button status changes from Disabled to Login when email and password fields have input ', async () => {
-
+    test('it checks Login action when email and password fields have input', async () => {
         const user = {email: "test@test.com", password: '123456'};
+        const url = '/api/users/login';
 
-        jest.mock('react', () => {
-            const actualReact = jest.requireActual('react');
-            const mockSetUser = jest.fn();
+        function postMock() {
+            return new Promise((resolve) =>
+                setTimeout(() => {
+                    resolve({
+                        json: () =>
+                            Promise.resolve({
+                                data: "success",
+                            }),
+                    });
+                }, 1000)
+            );
+        }
 
-            return {
-                ...actualReact,
-                useState: user => [user, mockSetUser],
-            };
-        });
+        jest.spyOn(axios, "post").mockImplementation(postMock);
 
         const inputs = document.querySelectorAll('input');
         const emailInput = inputs[0];
@@ -118,8 +119,8 @@ describe("Displays Login Page Components on Screen", () => {
 
         // fill fields
         act(() => {
-            fireEvent.change(emailInput, {target: {value: 'test@test.com'}});
-            fireEvent.change(passwordInput, {target: {value: '123456'}});
+            fireEvent.change(emailInput, {target: {value: user.email}});
+            fireEvent.change(passwordInput, {target: {value: user.password}});
         });
 
         // this works with disable text below; we need it to work with /login/i
@@ -131,8 +132,6 @@ describe("Displays Login Page Components on Screen", () => {
             );
         });
 
-        console.log('Button Text:', buttons[0].textContent);
-
         const LoginButton = buttons[0];
         expect(LoginButton.textContent).toEqual('Login');
 
@@ -141,13 +140,9 @@ describe("Displays Login Page Components on Screen", () => {
             fireEvent.click(LoginButton);
         });
 
-        const url = '/api/users/login';
-
         expect(axios.post).toHaveBeenCalledWith(
-            url, user, {headers: {Authorization: expect.stringMatching(/.+/)},}
+            url, user, {headers: {Authorization: expect.stringMatching(/.+/)}}
         )
-
-        expect(axios.post).toHaveBeenCalled();
     });
 });
 

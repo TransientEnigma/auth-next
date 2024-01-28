@@ -31,11 +31,11 @@ export default function LoginPage() {
               },
           });
 
-      console.log('Login success', response.data);
+      // console.log('Login success', response.data);
       toast.success('Login success');
       router.push('/profile')
     } catch (error: any) {
-      console.log('Login failed', error.message);
+      // console.log('Login failed', error.message);
       toast.error(error.message);
     } finally {
       setLoading(false);
